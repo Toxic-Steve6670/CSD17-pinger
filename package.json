@@ -1,0 +1,20 @@
+{
+  "name": "auto_url_pinger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jz-wang/auto-url-pinger.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jz-wang/auto-url-pinger/issues"
+  },
+  "homepage": "https://github.com/jz-wang/auto-url-pinger#readme"
+}
