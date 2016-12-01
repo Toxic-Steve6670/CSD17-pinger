@@ -4,17 +4,17 @@
   "version": "1.0",
   "description": "Prevent dynos from falling asleep.",
   "icons": {
-    "16": "icon/d16.png",
-    "48": "icon/d48.png",
-    "128": "icon/d128.png"
+    "16": "assets/icon/d16.png",
+    "48": "assets/icon/d48.png",
+    "128": "assets/icon/d128.png"
   },
   "background": {
     "scripts" : ["background.js"]
   },
   "browser_action": {
-    "default_icon": {
-      "19": "icon/d19.png",
-      "38": "icon/d38.png"
+    "default_assets/icon": {
+      "19": "assets/icon/d19.png",
+      "38": "assets/icon/d38.png"
     },
     "default_title": "Pinger",
     "default_popup": "popup.html"
