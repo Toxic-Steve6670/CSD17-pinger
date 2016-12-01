@@ -2,29 +2,23 @@
   "manifest_version": 2,
   "name": "Auto URL Pinger",
   "version": "1.0",
-
   "description": "Prevent dynos from falling asleep.",
   "icons": {
-    "16": "",
-    "48": "",
-    "128": ""
+    "16": "icon/d16.png",
+    "48": "icon/d48.png",
+    "128": "icon/d128.png"
   },
-
-
   "background": {
     "scripts" : ["background.js"]
   },
-
-
   "browser_action": {
     "default_icon": {
-      "19": "",
-      "38": ""
+      "19": "icon/d19.png",
+      "38": "icon/d38.png"
     },
-    "default_title": "",
+    "default_title": "Pinger",
     "default_popup": "popup.html"
   },
-
   "permissions": [
     "alarms",
     "storage",
