@@ -130,8 +130,20 @@
 	      }
 	    }
 	  }, {
+	    key: 'removeAddress',
+	    value: function removeAddress(add, e) {
+	      e.preventDefault();
+	      var idx = this.state.address.indexOf(add);
+	      var address = [].concat(this.state.address);
+	      address.splice(idx, 1);
+	      this.setState({ address: address });
+	      chrome.storage.sync.set({ 'pinger-addresses': address });
+	    }
+	  }, {
 	    key: 'showAddressList',
 	    value: function showAddressList() {
+	      var _this3 = this;
+	
 	      if (!this.state.address.length) {
 	        return _react2.default.createElement(
 	          'div',
@@ -143,7 +155,17 @@
 	          return _react2.default.createElement(
 	            'li',
 	            { type: '1', key: 'address-' + i },
-	            add
+	            add,
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'close-icon-container' },
+	              _react2.default.createElement('img', { src: '../../../assets/icon/close.png',
+	                onClick: function onClick(e) {
+	                  return _this3.removeAddress(add, e);
+	                },
+	                height: '17',
+	                width: '17' })
+	            )
 	          );
 	        });
 	      }
@@ -205,20 +227,20 @@
 	  }, {
 	    key: 'toggleAlarm',
 	    value: function toggleAlarm() {
-	      var _this3 = this;
+	      var _this4 = this;
 	
 	      chrome.alarms.getAll(function (alarms) {
 	        var hasAlarm = alarms.some(function (a) {
-	          return a.name === _this3.state.alarmName;
+	          return a.name === _this4.state.alarmName;
 	        });
 	        if (hasAlarm) {
-	          _this3.setState({ newLabel: 'Activate!' });
-	          chrome.alarms.clear(_this3.state.alarmName);
+	          _this4.setState({ newLabel: 'Activate!' });
+	          chrome.alarms.clear(_this4.state.alarmName);
 	        } else {
-	          _this3.setState({ newLabel: 'Cancel' });
-	          chrome.alarms.create(_this3.state.alarmName, { delayInMinutes: 0.1, periodInMinutes: 0.1 });
-	          var start = parseInt(_this3.state.startTime.split('am').join(''));
-	          var end = parseInt(_this3.state.endTime.split('pm').join(''));
+	          _this4.setState({ newLabel: 'Cancel' });
+	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 0.1, periodInMinutes: 0.1 });
+	          var start = parseInt(_this4.state.startTime.split('am').join(''));
+	          var end = parseInt(_this4.state.endTime.split('pm').join(''));
 	          chrome.storage.sync.set({ 'pinger-start-end-times': [start, end] });
 	        }
 	      });
@@ -237,10 +259,10 @@
 	  }, {
 	    key: 'update',
 	    value: function update(field) {
-	      var _this4 = this;
+	      var _this5 = this;
 	
 	      return function (e) {
-	        _this4.setState(_defineProperty({}, field, e.currentTarget.value));
+	        _this5.setState(_defineProperty({}, field, e.currentTarget.value));
 	      };
 	    }
 	  }, {

@@ -56,6 +56,15 @@ class Popup extends React.Component {
     }
   }
 
+  removeAddress(add, e){
+    e.preventDefault();
+    let idx = this.state.address.indexOf(add);
+    let address = [].concat(this.state.address);
+    address.splice(idx, 1);
+    this.setState({address: address});
+    chrome.storage.sync.set({'pinger-addresses': address});
+  }
+
   showAddressList(){
     if(!this.state.address.length){
       return(<div>No address saved</div>);
@@ -63,7 +72,15 @@ class Popup extends React.Component {
       return (
         this.state.address.map((add, i)=>{
           return(
-            <li type='1' key={`address-${i}`}>{add}</li>
+            <li type='1' key={`address-${i}`}>
+              {add}
+              <div className='close-icon-container'>
+                <img src='../../../assets/icon/close.png'
+                     onClick={(e)=>this.removeAddress(add, e)}
+                     height='17'
+                     width='17'/>
+              </div>
+            </li>
           );
         })
       );

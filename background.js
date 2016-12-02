@@ -5,7 +5,10 @@ function pinger(addresses){
       method: 'GET',
       url: add,
       success: function(){
-        window.console.log('auto-url-pinger: success!');
+        window.console.log(`ping to ${add} : success!`);
+      },
+      error: function(){
+        window.console.log(`ping to ${add} : failed.`);
       }
     });
   });
