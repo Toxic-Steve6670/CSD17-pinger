@@ -13,13 +13,15 @@ class Popup extends React.Component {
       inputAddress: '',
       warning: false,
       newLabel: 'Activate!',
-      alarmName: 'auto-url-pinger'
+      alarmName: 'auto-url-pinger',
+      inOutTime: ''
     };
     this.submitAddress = this.submitAddress.bind(this);
     this.toggleAlarm = this.toggleAlarm.bind(this);
   }
 
   componentDidMount(){
+    this.setState({inOutTime: this.timeChecker()});
     chrome.storage.sync.get('pinger-addresses', (data)=>{
       let response = data['pinger-addresses'];
       if(response){
@@ -37,6 +39,7 @@ class Popup extends React.Component {
         this.setState({newLabel: 'Cancel'});
       }
     });
+
   }
 
   submitAddress(e){
@@ -61,7 +64,10 @@ class Popup extends React.Component {
     let idx = this.state.address.indexOf(add);
     let address = [].concat(this.state.address);
     address.splice(idx, 1);
-    this.setState({address: address});
+    this.setState({
+      address: address,
+      warning: false
+    });
     chrome.storage.sync.set({'pinger-addresses': address});
   }
 
@@ -72,15 +78,17 @@ class Popup extends React.Component {
       return (
         this.state.address.map((add, i)=>{
           return(
-            <li type='1' key={`address-${i}`}>
-              {add}
-              <div className='close-icon-container'>
+            <div id='single-list' key={`list-${i}`}>
+              <li type='1' key={`address-${i}`} id='inner-list'>
+                {add}
+              </li>
+              <div id='close-button'>
                 <img src='../../../assets/icon/close.png'
-                     onClick={(e)=>this.removeAddress(add, e)}
-                     height='17'
-                     width='17'/>
+                  onClick={(e)=>this.removeAddress(add, e)}
+                  height='17'
+                  width='17'/>
               </div>
-            </li>
+            </div>
           );
         })
       );
@@ -90,34 +98,33 @@ class Popup extends React.Component {
   showAddressInput(){
     let http = 'http://', https = 'https://';
     return(
-      <form onSubmit={this.submitAddress} autoComplete='off'>
-        <select id="transfer-protocol"
-                onChange={this.update('transferProtocol')}>
-                <option>{http}</option>
-                <option>{https}</option>
-        </select>
-          <input type='text'
-                 placeholder='address'
-                 value={this.state.inputAddress}
-                 onChange={this.update('inputAddress')}
-                 id='address-input'/>
-          <input type='submit' value=""/>
-          <div className='address-input-buttons'>
-            <div className='address-input-box-submit'
-              onClick={this.submitAddress}>
-              <img src='../../../assets/icon/plus.png'
-                width='10'
-                height='10'/>
-            </div>
-          </div>
-        </form>
+      <form onSubmit={this.submitAddress} autoComplete='off' id='add-address'>
+        <div id="transfer-protocol">
+          <select>
+            onChange={this.update('transferProtocol')}>
+            <option>{http}</option>
+            <option>{https}</option>
+          </select>
+        </div>
+        <input type='text'
+               placeholder='address'
+               value={this.state.inputAddress}
+               onChange={this.update('inputAddress')}
+               id='address-input'/>
+        <div id='add-button'>
+          <img src='../../../assets/icon/plus.png'
+               onClick={this.submitAddress}
+               width='15'
+               height='15'/>
+        </div>
+      </form>
     );
   }
 
   showWarning(){
     if(this.state.warning){
       return(
-        <span>Please put in an address!</span>
+        <div id='warning'>Please put in an address!</div>
       );
     }
   }
@@ -130,11 +137,13 @@ class Popup extends React.Component {
       if (hasAlarm) {
         this.setState({newLabel: 'Activate!'});
         chrome.alarms.clear(this.state.alarmName);
+        $('#start').removeClass('green-background red-background').
+        addClass('yellow-background');
       } else {
         this.setState({newLabel: 'Cancel'});
         chrome.alarms.create(
           this.state.alarmName,
-          {delayInMinutes: 0.1, periodInMinutes: 0.1}
+          {delayInMinutes: 1, periodInMinutes: 19}
         );
         let start = parseInt(this.state.startTime.split('am').join(''));
         let end = parseInt(this.state.endTime.split('pm').join(''));
@@ -145,11 +154,24 @@ class Popup extends React.Component {
     });
   }
 
+  timeChecker(){
+    let currentHour = new Date().getHours();
+    let startHour = parseInt(this.state.startTime.split('am').join(''));
+    let endHour = parseInt(this.state.endTime.split('pm').join(''));
+    if(currentHour >= startHour && currentHour < endHour){
+      return 'inTime';
+    } else {
+      return 'outTime';
+    }
+  }
+
   showAlarm(){
     if(this.state.address.length > 0){
       return (
-        <div onClick={this.toggleAlarm}>
-          {this.state.newLabel}
+        <div id='start-div'>
+          <span id='alarm-label' onClick={this.toggleAlarm}>
+            {this.state.newLabel}
+          </span>
           {this.showLoader()}
         </div>
       );
@@ -157,10 +179,25 @@ class Popup extends React.Component {
   }
 
   showLoader(){
+    let startDiv = $('#start');
     if(this.state.newLabel === 'Cancel'){
-      return(
-        <div className='loader'></div>
-      );
+      if(this.state.inOutTime === 'inTime'){
+        startDiv.removeClass('yellow-background').addClass('green-background');
+        return(
+          <div id='start-div'>
+            <span id='pinging-text'>pinging...</span>
+            <div className='loader'></div>
+          </div>
+        );
+      } else {
+        startDiv.removeClass('yellow-background').addClass('red-background');
+        return(
+          <div id='start-div'>
+            <span id='pinging-text'>waiting...</span>
+            <div className='loader2'></div>
+          </div>
+        );
+      }
     }
   }
 
@@ -172,37 +209,47 @@ class Popup extends React.Component {
     return(
       <div id='container'>
         <div id='address-list'>
-          <ol>
-            {this.showAddressList()}
-          </ol>
+            <ol>
+              {this.showAddressList()}
+            </ol>
         </div>
-        <div id='add-address'>
+        <div id='data-input'>
           {this.showAddressInput()}
           {this.showWarning()}
+          <div id='time-range'>
+            <div id='time-child'>From</div>
+            <select id="hours time-child"
+              onChange={this.update('startTime')}>
+              <option>1am</option>
+              <option>2am</option>
+              <option>3am</option>
+              <option>4am</option>
+              <option>5am</option>
+              <option>6am</option>
+              <option>7am</option>
+              <option>8am</option>
+              <option>9am</option>
+              <option>10am</option>
+              <option>11am</option>
+            </select>
+            <div id='time-child'>To</div>
+            <select id="hours time-child"
+              onChange={this.update('endTime')}>
+              <option>1pm</option>
+              <option>2pm</option>
+              <option>3pm</option>
+              <option>4pm</option>
+              <option>5pm</option>
+              <option>6pm</option>
+              <option>7pm</option>
+              <option>8pm</option>
+              <option>9pm</option>
+              <option>10pm</option>
+              <option>11pm</option>
+            </select>
+          </div>
         </div>
-        <div id='time-range'>
-          <span>From</span>
-          <select id="hours"
-                  onChange={this.update('startTime')}>
-                  <option>5am</option>
-                  <option>6am</option>
-                  <option>7am</option>
-                  <option>8am</option>
-                  <option>9am</option>
-                  <option>10am</option>
-          </select>
-          <span>To</span>
-          <select id="hours"
-                  onChange={this.update('endTime')}>
-                  <option>5pm</option>
-                  <option>6pm</option>
-                  <option>7pm</option>
-                  <option>8pm</option>
-                  <option>9pm</option>
-                  <option>10pm</option>
-          </select>
-        </div>
-        <div id='start'>
+        <div id='start' className='yellow-background'>
           {this.showAlarm()}
         </div>
       </div>

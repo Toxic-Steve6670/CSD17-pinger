@@ -83,7 +83,8 @@
 	      inputAddress: '',
 	      warning: false,
 	      newLabel: 'Activate!',
-	      alarmName: 'auto-url-pinger'
+	      alarmName: 'auto-url-pinger',
+	      inOutTime: ''
 	    };
 	    _this.submitAddress = _this.submitAddress.bind(_this);
 	    _this.toggleAlarm = _this.toggleAlarm.bind(_this);
@@ -95,6 +96,7 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
+	      this.setState({ inOutTime: this.timeChecker() });
 	      chrome.storage.sync.get('pinger-addresses', function (data) {
 	        var response = data['pinger-addresses'];
 	        if (response) {
@@ -136,7 +138,10 @@
 	      var idx = this.state.address.indexOf(add);
 	      var address = [].concat(this.state.address);
 	      address.splice(idx, 1);
-	      this.setState({ address: address });
+	      this.setState({
+	        address: address,
+	        warning: false
+	      });
 	      chrome.storage.sync.set({ 'pinger-addresses': address });
 	    }
 	  }, {
@@ -153,12 +158,16 @@
 	      } else {
 	        return this.state.address.map(function (add, i) {
 	          return _react2.default.createElement(
-	            'li',
-	            { type: '1', key: 'address-' + i },
-	            add,
+	            'div',
+	            { id: 'single-list', key: 'list-' + i },
+	            _react2.default.createElement(
+	              'li',
+	              { type: '1', key: 'address-' + i, id: 'inner-list' },
+	              add
+	            ),
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'close-icon-container' },
+	              { id: 'close-button' },
 	              _react2.default.createElement('img', { src: '../../../assets/icon/close.png',
 	                onClick: function onClick(e) {
 	                  return _this3.removeAddress(add, e);
@@ -177,20 +186,26 @@
 	          https = 'https://';
 	      return _react2.default.createElement(
 	        'form',
-	        { onSubmit: this.submitAddress, autoComplete: 'off' },
+	        { onSubmit: this.submitAddress, autoComplete: 'off', id: 'add-address' },
 	        _react2.default.createElement(
-	          'select',
-	          { id: 'transfer-protocol',
-	            onChange: this.update('transferProtocol') },
+	          'div',
+	          { id: 'transfer-protocol' },
 	          _react2.default.createElement(
-	            'option',
+	            'select',
 	            null,
-	            http
-	          ),
-	          _react2.default.createElement(
-	            'option',
-	            null,
-	            https
+	            'onChange=',
+	            this.update('transferProtocol'),
+	            '>',
+	            _react2.default.createElement(
+	              'option',
+	              null,
+	              http
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              null,
+	              https
+	            )
 	          )
 	        ),
 	        _react2.default.createElement('input', { type: 'text',
@@ -198,18 +213,13 @@
 	          value: this.state.inputAddress,
 	          onChange: this.update('inputAddress'),
 	          id: 'address-input' }),
-	        _react2.default.createElement('input', { type: 'submit', value: '' }),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'address-input-buttons' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'address-input-box-submit',
-	              onClick: this.submitAddress },
-	            _react2.default.createElement('img', { src: '../../../assets/icon/plus.png',
-	              width: '10',
-	              height: '10' })
-	          )
+	          { id: 'add-button' },
+	          _react2.default.createElement('img', { src: '../../../assets/icon/plus.png',
+	            onClick: this.submitAddress,
+	            width: '15',
+	            height: '15' })
 	        )
 	      );
 	    }
@@ -218,8 +228,8 @@
 	    value: function showWarning() {
 	      if (this.state.warning) {
 	        return _react2.default.createElement(
-	          'span',
-	          null,
+	          'div',
+	          { id: 'warning' },
 	          'Please put in an address!'
 	        );
 	      }
@@ -236,9 +246,10 @@
 	        if (hasAlarm) {
 	          _this4.setState({ newLabel: 'Activate!' });
 	          chrome.alarms.clear(_this4.state.alarmName);
+	          $('#start').removeClass('green-background red-background').addClass('yellow-background');
 	        } else {
 	          _this4.setState({ newLabel: 'Cancel' });
-	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 0.1, periodInMinutes: 0.1 });
+	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 1, periodInMinutes: 19 });
 	          var start = parseInt(_this4.state.startTime.split('am').join(''));
 	          var end = parseInt(_this4.state.endTime.split('pm').join(''));
 	          chrome.storage.sync.set({ 'pinger-start-end-times': [start, end] });
@@ -246,13 +257,29 @@
 	      });
 	    }
 	  }, {
+	    key: 'timeChecker',
+	    value: function timeChecker() {
+	      var currentHour = new Date().getHours();
+	      var startHour = parseInt(this.state.startTime.split('am').join(''));
+	      var endHour = parseInt(this.state.endTime.split('pm').join(''));
+	      if (currentHour >= startHour && currentHour < endHour) {
+	        return 'inTime';
+	      } else {
+	        return 'outTime';
+	      }
+	    }
+	  }, {
 	    key: 'showAlarm',
 	    value: function showAlarm() {
 	      if (this.state.address.length > 0) {
 	        return _react2.default.createElement(
 	          'div',
-	          { onClick: this.toggleAlarm },
-	          this.state.newLabel,
+	          { id: 'start-div' },
+	          _react2.default.createElement(
+	            'span',
+	            { id: 'alarm-label', onClick: this.toggleAlarm },
+	            this.state.newLabel
+	          ),
 	          this.showLoader()
 	        );
 	      }
@@ -260,8 +287,33 @@
 	  }, {
 	    key: 'showLoader',
 	    value: function showLoader() {
+	      var startDiv = $('#start');
 	      if (this.state.newLabel === 'Cancel') {
-	        return _react2.default.createElement('div', { className: 'loader' });
+	        if (this.state.inOutTime === 'inTime') {
+	          startDiv.removeClass('yellow-background').addClass('green-background');
+	          return _react2.default.createElement(
+	            'div',
+	            { id: 'start-div' },
+	            _react2.default.createElement(
+	              'span',
+	              { id: 'pinging-text' },
+	              'pinging...'
+	            ),
+	            _react2.default.createElement('div', { className: 'loader' })
+	          );
+	        } else {
+	          startDiv.removeClass('yellow-background').addClass('red-background');
+	          return _react2.default.createElement(
+	            'div',
+	            { id: 'start-div' },
+	            _react2.default.createElement(
+	              'span',
+	              { id: 'pinging-text' },
+	              'waiting...'
+	            ),
+	            _react2.default.createElement('div', { className: 'loader2' })
+	          );
+	        }
 	      }
 	    }
 	  }, {
@@ -290,97 +342,147 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { id: 'add-address' },
+	          { id: 'data-input' },
 	          this.showAddressInput(),
-	          this.showWarning()
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { id: 'time-range' },
+	          this.showWarning(),
 	          _react2.default.createElement(
-	            'span',
-	            null,
-	            'From'
-	          ),
-	          _react2.default.createElement(
-	            'select',
-	            { id: 'hours',
-	              onChange: this.update('startTime') },
+	            'div',
+	            { id: 'time-range' },
 	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '5am'
+	              'div',
+	              { id: 'time-child' },
+	              'From'
 	            ),
 	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '6am'
+	              'select',
+	              { id: 'hours time-child',
+	                onChange: this.update('startTime') },
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '1am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '2am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '3am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '4am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '5am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '6am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '7am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '8am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '9am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '10am'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '11am'
+	              )
 	            ),
 	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '7am'
+	              'div',
+	              { id: 'time-child' },
+	              'To'
 	            ),
 	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '8am'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '9am'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '10am'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'span',
-	            null,
-	            'To'
-	          ),
-	          _react2.default.createElement(
-	            'select',
-	            { id: 'hours',
-	              onChange: this.update('endTime') },
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '5pm'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '6pm'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '7pm'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '8pm'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '9pm'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              '10pm'
+	              'select',
+	              { id: 'hours time-child',
+	                onChange: this.update('endTime') },
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '1pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '2pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '3pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '4pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '5pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '6pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '7pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '8pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '9pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '10pm'
+	              ),
+	              _react2.default.createElement(
+	                'option',
+	                null,
+	                '11pm'
+	              )
 	            )
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { id: 'start' },
+	          { id: 'start', className: 'yellow-background' },
 	          this.showAlarm()
 	        )
 	      );
