@@ -7,8 +7,8 @@ class Popup extends React.Component {
     super(props);
     this.state = {
       address: [],
-      startTime: '',
-      endTime: '',
+      startTime: '5am',
+      endTime: '5pm',
       inputAddress: '',
       warning: false,
       newLabel: 'Activate!',
@@ -19,7 +19,6 @@ class Popup extends React.Component {
   }
 
   componentDidMount(){
-    let hasAlarm;
     chrome.storage.sync.get('pinger-addresses', (data)=>{
       let response = data['pinger-addresses'];
       if(response){
@@ -27,8 +26,6 @@ class Popup extends React.Component {
           let address = response.concat(this.state.address);
           this.setState({address: address});
         }
-      } else {
-        chrome.storage.sync.set({'pinger-addresses': []});
       }
     });
     chrome.alarms.getAll(alarms=>{
@@ -112,6 +109,11 @@ class Popup extends React.Component {
         chrome.alarms.create(
           this.state.alarmName,
           {delayInMinutes: 0.1, periodInMinutes: 0.1}
+        );
+        let start = parseInt(this.state.startTime.split('am').join(''));
+        let end = parseInt(this.state.endTime.split('pm').join(''));
+        chrome.storage.sync.set(
+          {'pinger-start-end-times': [start, end]}
         );
       }
     });

@@ -77,8 +77,8 @@
 	
 	    _this.state = {
 	      address: [],
-	      startTime: '',
-	      endTime: '',
+	      startTime: '5am',
+	      endTime: '5pm',
 	      inputAddress: '',
 	      warning: false,
 	      newLabel: 'Activate!',
@@ -94,7 +94,6 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
-	      var hasAlarm = void 0;
 	      chrome.storage.sync.get('pinger-addresses', function (data) {
 	        var response = data['pinger-addresses'];
 	        if (response) {
@@ -102,8 +101,6 @@
 	            var address = response.concat(_this2.state.address);
 	            _this2.setState({ address: address });
 	          }
-	        } else {
-	          chrome.storage.sync.set({ 'pinger-addresses': [] });
 	        }
 	      });
 	      chrome.alarms.getAll(function (alarms) {
@@ -202,6 +199,9 @@
 	        } else {
 	          _this3.setState({ newLabel: 'Cancel' });
 	          chrome.alarms.create(_this3.state.alarmName, { delayInMinutes: 0.1, periodInMinutes: 0.1 });
+	          var start = parseInt(_this3.state.startTime.split('am').join(''));
+	          var end = parseInt(_this3.state.endTime.split('pm').join(''));
+	          chrome.storage.sync.set({ 'pinger-start-end-times': [start, end] });
 	        }
 	      });
 	    }
