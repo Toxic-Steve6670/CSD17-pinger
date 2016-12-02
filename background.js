@@ -3,9 +3,9 @@ function pinger(addresses){
   addresses['pinger-addresses'].forEach(add=>{
     $.ajax({
       method: 'GET',
-      url: 'http://' + add,
+      url: add,
       success: function(){
-        window.console.log('success!');
+        window.console.log('auto-url-pinger: success!');
       }
     });
   });

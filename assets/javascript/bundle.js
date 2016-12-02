@@ -77,6 +77,7 @@
 	
 	    _this.state = {
 	      address: [],
+	      transferProtocol: 'http://',
 	      startTime: '5am',
 	      endTime: '5pm',
 	      inputAddress: '',
@@ -119,7 +120,7 @@
 	      if (!this.state.inputAddress) {
 	        this.setState({ warning: true });
 	      } else {
-	        var address = this.state.address.concat([this.state.inputAddress]);
+	        var address = this.state.address.concat([this.state.transferProtocol + this.state.inputAddress + '/']);
 	        chrome.storage.sync.set({ 'pinger-addresses': address });
 	        this.setState({
 	          address: address,
@@ -150,9 +151,26 @@
 	  }, {
 	    key: 'showAddressInput',
 	    value: function showAddressInput() {
+	      var http = 'http://',
+	          https = 'https://';
 	      return _react2.default.createElement(
 	        'form',
 	        { onSubmit: this.submitAddress, autoComplete: 'off' },
+	        _react2.default.createElement(
+	          'select',
+	          { id: 'transfer-protocol',
+	            onChange: this.update('transferProtocol') },
+	          _react2.default.createElement(
+	            'option',
+	            null,
+	            http
+	          ),
+	          _react2.default.createElement(
+	            'option',
+	            null,
+	            https
+	          )
+	        ),
 	        _react2.default.createElement('input', { type: 'text',
 	          placeholder: 'address',
 	          value: this.state.inputAddress,

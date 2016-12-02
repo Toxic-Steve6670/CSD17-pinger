@@ -7,6 +7,7 @@ class Popup extends React.Component {
     super(props);
     this.state = {
       address: [],
+      transferProtocol: 'http://',
       startTime: '5am',
       endTime: '5pm',
       inputAddress: '',
@@ -43,7 +44,9 @@ class Popup extends React.Component {
     if(!this.state.inputAddress){
       this.setState({warning: true});
     } else {
-      let address = this.state.address.concat([this.state.inputAddress]);
+      let address = this.state.address.concat(
+        [this.state.transferProtocol + this.state.inputAddress + '/']
+      );
       chrome.storage.sync.set({'pinger-addresses': address});
       this.setState({
         address: address,
@@ -68,8 +71,14 @@ class Popup extends React.Component {
   }
 
   showAddressInput(){
+    let http = 'http://', https = 'https://';
     return(
       <form onSubmit={this.submitAddress} autoComplete='off'>
+        <select id="transfer-protocol"
+                onChange={this.update('transferProtocol')}>
+                <option>{http}</option>
+                <option>{https}</option>
+        </select>
           <input type='text'
                  placeholder='address'
                  value={this.state.inputAddress}
