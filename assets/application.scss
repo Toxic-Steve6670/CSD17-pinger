@@ -1,0 +1,35 @@
+html, body, header, footer, section, article, div,
+strong, a, img, p, h1, h2, h3, time, small,
+form, label, input, textarea, button {
+  margin: 0;
+  border: 0;
+  padding: 0;
+
+  font: inherit;
+  box-sizing: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  vertical-align: inherit;
+  color: inherit;
+  background: transparent;
+  font-family: sans-serif;
+}
+
+#container {
+  border-radius: 1px solid red;
+}
+
+.loader {
+  border: 3px solid #fafafa;
+  border-top: 3px solid black;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  animation: spin 0.5s linear infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  0 { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

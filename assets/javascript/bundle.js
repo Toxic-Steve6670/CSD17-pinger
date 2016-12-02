@@ -252,8 +252,16 @@
 	        return _react2.default.createElement(
 	          'div',
 	          { onClick: this.toggleAlarm },
-	          this.state.newLabel
+	          this.state.newLabel,
+	          this.showLoader()
 	        );
+	      }
+	    }
+	  }, {
+	    key: 'showLoader',
+	    value: function showLoader() {
+	      if (this.state.newLabel === 'Cancel') {
+	        return _react2.default.createElement('div', { className: 'loader' });
 	      }
 	    }
 	  }, {

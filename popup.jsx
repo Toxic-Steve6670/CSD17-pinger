@@ -150,7 +150,16 @@ class Popup extends React.Component {
       return (
         <div onClick={this.toggleAlarm}>
           {this.state.newLabel}
+          {this.showLoader()}
         </div>
+      );
+    }
+  }
+
+  showLoader(){
+    if(this.state.newLabel === 'Cancel'){
+      return(
+        <div className='loader'></div>
       );
     }
   }
