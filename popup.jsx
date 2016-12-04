@@ -192,7 +192,6 @@ class Popup extends React.Component {
   showLoader(){
     let startDiv = $('#start');
     if(this.state.newLabel === 'Cancel'){
-      debugger;
       if(this.state.inOutTime === 'inTime'){
         startDiv.removeClass('yellow-background').addClass('green-background');
         return(

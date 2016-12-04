@@ -301,7 +301,6 @@
 	    value: function showLoader() {
 	      var startDiv = $('#start');
 	      if (this.state.newLabel === 'Cancel') {
-	        debugger;
 	        if (this.state.inOutTime === 'inTime') {
 	          startDiv.removeClass('yellow-background').addClass('green-background');
 	          return _react2.default.createElement(
