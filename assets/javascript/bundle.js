@@ -96,7 +96,6 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
-	      this.setState({ inOutTime: this.timeChecker() });
 	      chrome.storage.sync.get('pinger-addresses', function (data) {
 	        var response = data['pinger-addresses'];
 	        if (response) {
@@ -116,19 +115,17 @@
 	      });
 	      chrome.storage.sync.get('pinger-start-end-times', function (data) {
 	        if (data['pinger-start-end-times']) {
-	          (function () {
-	            var times = data['pinger-start-end-times'];
-	            var startOption = $('.start-time')[0][times[0] - 1];
-	            var endOption = $('.end-time')[0][times[1] - 1];
-	            $(startOption).attr('selected', true);
-	            $(endOption).attr('selected', true);
-	            setTimeout(function () {
-	              _this2.setState({
-	                startTime: times[0] + 'am',
-	                endTime: times[1] + 'pm'
-	              });
-	            }, 1000);
-	          })();
+	          var times = data['pinger-start-end-times'];
+	          var time = _this2.timeChecker(times[0], times[1] + 12);
+	          _this2.setState({
+	            startTime: times[0] + 'am',
+	            endTime: times[1] + 'pm',
+	            inOutTime: time
+	          });
+	          var startOption = $('.start-time')[0][times[0] - 1];
+	          var endOption = $('.end-time')[0][times[1] - 1];
+	          $(startOption).attr('selected', true);
+	          $(endOption).attr('selected', true);
 	        }
 	      });
 	    }
@@ -256,7 +253,6 @@
 	    value: function toggleAlarm() {
 	      var _this4 = this;
 	
-	      debugger;
 	      chrome.alarms.getAll(function (alarms) {
 	        var hasAlarm = alarms.some(function (a) {
 	          return a.name === _this4.state.alarmName;
@@ -276,10 +272,8 @@
 	    }
 	  }, {
 	    key: 'timeChecker',
-	    value: function timeChecker() {
+	    value: function timeChecker(startHour, endHour) {
 	      var currentHour = new Date().getHours();
-	      var startHour = parseInt(this.state.startTime.split('am').join(''));
-	      var endHour = parseInt(this.state.endTime.split('pm').join(''));
 	      if (currentHour >= startHour && currentHour < endHour) {
 	        return 'inTime';
 	      } else {
@@ -307,6 +301,7 @@
 	    value: function showLoader() {
 	      var startDiv = $('#start');
 	      if (this.state.newLabel === 'Cancel') {
+	        debugger;
 	        if (this.state.inOutTime === 'inTime') {
 	          startDiv.removeClass('yellow-background').addClass('green-background');
 	          return _react2.default.createElement(

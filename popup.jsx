@@ -21,7 +21,6 @@ class Popup extends React.Component {
   }
 
   componentDidMount(){
-    this.setState({inOutTime: this.timeChecker()});
     chrome.storage.sync.get('pinger-addresses', data=>{
       let response = data['pinger-addresses'];
       if(response){
@@ -42,16 +41,16 @@ class Popup extends React.Component {
     chrome.storage.sync.get('pinger-start-end-times', data=>{
       if(data['pinger-start-end-times']){
         let times = data['pinger-start-end-times'];
+        let time = this.timeChecker(times[0], times[1] + 12);
+        this.setState({
+          startTime: times[0] + 'am',
+          endTime: times[1] + 'pm',
+          inOutTime: time
+        });
         let startOption = $('.start-time')[0][times[0] - 1];
         let endOption = $('.end-time')[0][times[1] - 1];
         $(startOption).attr('selected', true);
         $(endOption).attr('selected', true);
-        setTimeout(()=>{
-          this.setState({
-            startTime: times[0] + 'am',
-            endTime: times[1] + 'pm'
-          });
-        }, 1000);
       }
     });
   }
@@ -144,7 +143,6 @@ class Popup extends React.Component {
   }
 
   toggleAlarm(){
-    debugger;
     chrome.alarms.getAll(alarms=>{
       let hasAlarm = alarms.some(a=>{
         return a.name === this.state.alarmName;
@@ -169,10 +167,8 @@ class Popup extends React.Component {
     });
   }
 
-  timeChecker(){
+  timeChecker(startHour, endHour){
     let currentHour = new Date().getHours();
-    let startHour = parseInt(this.state.startTime.split('am').join(''));
-    let endHour = parseInt(this.state.endTime.split('pm').join(''));
     if(currentHour >= startHour && currentHour < endHour){
       return 'inTime';
     } else {
@@ -196,6 +192,7 @@ class Popup extends React.Component {
   showLoader(){
     let startDiv = $('#start');
     if(this.state.newLabel === 'Cancel'){
+      debugger;
       if(this.state.inOutTime === 'inTime'){
         startDiv.removeClass('yellow-background').addClass('green-background');
         return(
