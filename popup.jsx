@@ -248,9 +248,11 @@ class Popup extends React.Component {
   showLogs(){
     if(this.state.showLogs){
       return(
-        <ol>
-          {this.state.logs}
-        </ol>
+        <div id='logs'>
+          <ol>
+            {this.state.logs}
+          </ol>
+        </div>
       );
     }
   }
@@ -338,9 +340,7 @@ class Popup extends React.Component {
             <div onClick={e=>this.toggleLogs('show', e)}>Logs</div>
           </div>
           {this.showLogClose()}
-          <div id='logs'>
-            {this.showLogs()}
-          </div>
+          {this.showLogs()}
         </div>
       </div>
     );

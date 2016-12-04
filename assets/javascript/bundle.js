@@ -374,9 +374,13 @@
 	    value: function showLogs() {
 	      if (this.state.showLogs) {
 	        return _react2.default.createElement(
-	          'ol',
-	          null,
-	          this.state.logs
+	          'div',
+	          { id: 'logs' },
+	          _react2.default.createElement(
+	            'ol',
+	            null,
+	            this.state.logs
+	          )
 	        );
 	      }
 	    }
@@ -597,11 +601,7 @@
 	            )
 	          ),
 	          this.showLogClose(),
-	          _react2.default.createElement(
-	            'div',
-	            { id: 'logs' },
-	            this.showLogs()
-	          )
+	          this.showLogs()
 	        )
 	      );
 	    }
