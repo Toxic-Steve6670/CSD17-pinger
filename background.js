@@ -1,10 +1,12 @@
 /* global chrome */
-function pinger(addresses){
+function pinger(addresses, log){
+  window.console.log(log);
   addresses['pinger-addresses'].forEach(add=>{
     $.ajax({
       method: 'GET',
       url: add,
       success: function(){
+
         window.console.log(`ping to ${add} : success!`);
       },
       error: function(){
@@ -23,6 +25,15 @@ function timeChecker(range){
   }
 }
 
-chrome.alarms.onAlarm.addListener(function(alarm){
-  chrome.storage.sync.get('pinger-start-end-times', timeChecker);
+chrome.alarms.onAlarm.addListener(alarm=>{
+  let log = [];
+  chrome.storage.sync.get('pinger-log', data=>{
+    if(data['pinger-log']){
+      log = data['pinger-log'];
+    }
+    let innerLog = log;
+    chrome.storage.sync.get('pinger-start-end-times', addresses=>{
+      timeChecker(addresses, innerLog);
+    });
+  });
 });

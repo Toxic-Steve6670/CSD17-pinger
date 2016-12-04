@@ -156,7 +156,7 @@ class Popup extends React.Component {
         this.setState({newLabel: 'Cancel'});
         chrome.alarms.create(
           this.state.alarmName,
-          {delayInMinutes: 1, periodInMinutes: 19}
+          {delayInMinutes: 0.2, periodInMinutes: 0.2}
         );
         let start = parseInt(this.state.startTime.split('am').join(''));
         let end = parseInt(this.state.endTime.split('pm').join(''));
@@ -217,6 +217,17 @@ class Popup extends React.Component {
     return e => { this.setState({[field]: e.currentTarget.value }); };
   }
 
+  updateTime(field){
+    return e => {
+      this.setState({[field]: e.currentTarget.value }, ()=>{
+        let start = parseInt(this.state.startTime.split('am').join(''));
+        let end = parseInt(this.state.endTime.split('pm').join(''));
+        let time = this.timeChecker(start, end + 12);
+        this.setState({inOutTime: time});
+      });
+    };
+  }
+
   render(){
     return(
       <div id='container'>
@@ -232,7 +243,7 @@ class Popup extends React.Component {
             <div id='time-child'>From</div>
             <select id="hours time-child"
               className='start-time'
-              onChange={this.update('startTime')}>
+              onChange={this.updateTime('startTime')}>
               <option>1am</option>
               <option>2am</option>
               <option>3am</option>
@@ -248,7 +259,7 @@ class Popup extends React.Component {
             <div id='time-child'>To</div>
             <select id="hours time-child"
               className='end-time'
-              onChange={this.update('endTime')}>
+              onChange={this.updateTime('endTime')}>
               <option>1pm</option>
               <option>2pm</option>
               <option>3pm</option>

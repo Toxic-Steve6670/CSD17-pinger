@@ -263,7 +263,7 @@
 	          $('#start').removeClass('green-background red-background').addClass('yellow-background');
 	        } else {
 	          _this4.setState({ newLabel: 'Cancel' });
-	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 1, periodInMinutes: 19 });
+	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 0.2, periodInMinutes: 0.2 });
 	          var start = parseInt(_this4.state.startTime.split('am').join(''));
 	          var end = parseInt(_this4.state.endTime.split('pm').join(''));
 	          chrome.storage.sync.set({ 'pinger-start-end-times': [start, end] });
@@ -339,6 +339,20 @@
 	      };
 	    }
 	  }, {
+	    key: 'updateTime',
+	    value: function updateTime(field) {
+	      var _this6 = this;
+	
+	      return function (e) {
+	        _this6.setState(_defineProperty({}, field, e.currentTarget.value), function () {
+	          var start = parseInt(_this6.state.startTime.split('am').join(''));
+	          var end = parseInt(_this6.state.endTime.split('pm').join(''));
+	          var time = _this6.timeChecker(start, end + 12);
+	          _this6.setState({ inOutTime: time });
+	        });
+	      };
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -370,7 +384,7 @@
 	              'select',
 	              { id: 'hours time-child',
 	                className: 'start-time',
-	                onChange: this.update('startTime') },
+	                onChange: this.updateTime('startTime') },
 	              _react2.default.createElement(
 	                'option',
 	                null,
@@ -436,7 +450,7 @@
 	              'select',
 	              { id: 'hours time-child',
 	                className: 'end-time',
-	                onChange: this.update('endTime') },
+	                onChange: this.updateTime('endTime') },
 	              _react2.default.createElement(
 	                'option',
 	                null,
