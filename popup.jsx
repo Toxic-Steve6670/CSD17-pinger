@@ -8,8 +8,8 @@ class Popup extends React.Component {
     this.state = {
       address: [],
       transferProtocol: 'http://',
-      startTime: '5am',
-      endTime: '5pm',
+      startTime: '1am',
+      endTime: '1pm',
       inputAddress: '',
       warning: false,
       newLabel: 'Activate!',
@@ -22,7 +22,7 @@ class Popup extends React.Component {
 
   componentDidMount(){
     this.setState({inOutTime: this.timeChecker()});
-    chrome.storage.sync.get('pinger-addresses', (data)=>{
+    chrome.storage.sync.get('pinger-addresses', data=>{
       let response = data['pinger-addresses'];
       if(response){
         if(response.length > 0){
@@ -39,7 +39,21 @@ class Popup extends React.Component {
         this.setState({newLabel: 'Cancel'});
       }
     });
-
+    chrome.storage.sync.get('pinger-start-end-times', data=>{
+      if(data['pinger-start-end-times']){
+        let times = data['pinger-start-end-times'];
+        let startOption = $('.start-time')[0][times[0] - 1];
+        let endOption = $('.end-time')[0][times[1] - 1];
+        $(startOption).attr('selected', true);
+        $(endOption).attr('selected', true);
+        setTimeout(()=>{
+          this.setState({
+            startTime: times[0] + 'am',
+            endTime: times[1] + 'pm'
+          });
+        }, 1000);
+      }
+    });
   }
 
   submitAddress(e){
@@ -130,6 +144,7 @@ class Popup extends React.Component {
   }
 
   toggleAlarm(){
+    debugger;
     chrome.alarms.getAll(alarms=>{
       let hasAlarm = alarms.some(a=>{
         return a.name === this.state.alarmName;
@@ -219,6 +234,7 @@ class Popup extends React.Component {
           <div id='time-range'>
             <div id='time-child'>From</div>
             <select id="hours time-child"
+              className='start-time'
               onChange={this.update('startTime')}>
               <option>1am</option>
               <option>2am</option>
@@ -234,6 +250,7 @@ class Popup extends React.Component {
             </select>
             <div id='time-child'>To</div>
             <select id="hours time-child"
+              className='end-time'
               onChange={this.update('endTime')}>
               <option>1pm</option>
               <option>2pm</option>

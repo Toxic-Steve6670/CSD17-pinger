@@ -78,8 +78,8 @@
 	    _this.state = {
 	      address: [],
 	      transferProtocol: 'http://',
-	      startTime: '5am',
-	      endTime: '5pm',
+	      startTime: '1am',
+	      endTime: '1pm',
 	      inputAddress: '',
 	      warning: false,
 	      newLabel: 'Activate!',
@@ -112,6 +112,23 @@
 	        });
 	        if (has) {
 	          _this2.setState({ newLabel: 'Cancel' });
+	        }
+	      });
+	      chrome.storage.sync.get('pinger-start-end-times', function (data) {
+	        if (data['pinger-start-end-times']) {
+	          (function () {
+	            var times = data['pinger-start-end-times'];
+	            var startOption = $('.start-time')[0][times[0] - 1];
+	            var endOption = $('.end-time')[0][times[1] - 1];
+	            $(startOption).attr('selected', true);
+	            $(endOption).attr('selected', true);
+	            setTimeout(function () {
+	              _this2.setState({
+	                startTime: times[0] + 'am',
+	                endTime: times[1] + 'pm'
+	              });
+	            }, 1000);
+	          })();
 	        }
 	      });
 	    }
@@ -239,6 +256,7 @@
 	    value: function toggleAlarm() {
 	      var _this4 = this;
 	
+	      debugger;
 	      chrome.alarms.getAll(function (alarms) {
 	        var hasAlarm = alarms.some(function (a) {
 	          return a.name === _this4.state.alarmName;
@@ -356,6 +374,7 @@
 	            _react2.default.createElement(
 	              'select',
 	              { id: 'hours time-child',
+	                className: 'start-time',
 	                onChange: this.update('startTime') },
 	              _react2.default.createElement(
 	                'option',
@@ -421,6 +440,7 @@
 	            _react2.default.createElement(
 	              'select',
 	              { id: 'hours time-child',
+	                className: 'end-time',
 	                onChange: this.update('endTime') },
 	              _react2.default.createElement(
 	                'option',
