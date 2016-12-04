@@ -84,7 +84,8 @@
 	      warning: false,
 	      newLabel: 'Activate!',
 	      alarmName: 'auto-url-pinger',
-	      inOutTime: ''
+	      inOutTime: '',
+	      logs: []
 	    };
 	    _this.submitAddress = _this.submitAddress.bind(_this);
 	    _this.toggleAlarm = _this.toggleAlarm.bind(_this);
@@ -128,6 +129,7 @@
 	          $(endOption).attr('selected', true);
 	        }
 	      });
+	      this.getLogs();
 	    }
 	  }, {
 	    key: 'submitAddress',
@@ -329,25 +331,48 @@
 	      }
 	    }
 	  }, {
-	    key: 'update',
-	    value: function update(field) {
+	    key: 'getLogs',
+	    value: function getLogs() {
 	      var _this5 = this;
 	
+	      chrome.storage.sync.get('pinger-log', function (data) {
+	        var logs = data['pinger-log'];
+	        if (logs) {
+	          var l = logs.map(function (log, i) {
+	            return _react2.default.createElement(
+	              'div',
+	              { key: 'log-' + i },
+	              _react2.default.createElement(
+	                'li',
+	                { type: '1' },
+	                log
+	              )
+	            );
+	          });
+	          _this5.setState({ logs: l });
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update(field) {
+	      var _this6 = this;
+	
 	      return function (e) {
-	        _this5.setState(_defineProperty({}, field, e.currentTarget.value));
+	        _this6.setState(_defineProperty({}, field, e.currentTarget.value));
 	      };
 	    }
 	  }, {
 	    key: 'updateTime',
 	    value: function updateTime(field) {
-	      var _this6 = this;
+	      var _this7 = this;
 	
 	      return function (e) {
-	        _this6.setState(_defineProperty({}, field, e.currentTarget.value), function () {
-	          var start = parseInt(_this6.state.startTime.split('am').join(''));
-	          var end = parseInt(_this6.state.endTime.split('pm').join(''));
-	          var time = _this6.timeChecker(start, end + 12);
-	          _this6.setState({ inOutTime: time });
+	        _this7.setState(_defineProperty({}, field, e.currentTarget.value), function () {
+	          var start = parseInt(_this7.state.startTime.split('am').join(''));
+	          var end = parseInt(_this7.state.endTime.split('pm').join(''));
+	          var time = _this7.timeChecker(start, end + 12);
+	          _this7.setState({ inOutTime: time });
 	        });
 	      };
 	    }
@@ -512,6 +537,15 @@
 	          'div',
 	          { id: 'start', className: 'yellow-background' },
 	          this.showAlarm()
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { id: 'logs' },
+	          _react2.default.createElement(
+	            'ol',
+	            null,
+	            this.state.logs
+	          )
 	        )
 	      );
 	    }

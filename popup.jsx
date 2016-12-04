@@ -14,7 +14,8 @@ class Popup extends React.Component {
       warning: false,
       newLabel: 'Activate!',
       alarmName: 'auto-url-pinger',
-      inOutTime: ''
+      inOutTime: '',
+      logs: []
     };
     this.submitAddress = this.submitAddress.bind(this);
     this.toggleAlarm = this.toggleAlarm.bind(this);
@@ -53,6 +54,7 @@ class Popup extends React.Component {
         $(endOption).attr('selected', true);
       }
     });
+    this.getLogs();
   }
 
   submitAddress(e){
@@ -212,6 +214,24 @@ class Popup extends React.Component {
     }
   }
 
+  getLogs(){
+    chrome.storage.sync.get('pinger-log', data=>{
+      let logs = data['pinger-log'];
+      if(logs){
+        let l = logs.map((log, i)=>{
+          return(
+            <div key={`log-${i}`}>
+              <li type='1'>
+                {log}
+              </li>
+            </div>
+          );
+        });
+        this.setState({logs: l});
+      }
+    });
+  }
+
   update(field){
     return e => { this.setState({[field]: e.currentTarget.value }); };
   }
@@ -275,6 +295,11 @@ class Popup extends React.Component {
         </div>
         <div id='start' className='yellow-background'>
           {this.showAlarm()}
+        </div>
+        <div id='logs'>
+          <ol>
+            {this.state.logs}
+          </ol>
         </div>
       </div>
     );
