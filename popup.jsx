@@ -15,10 +15,12 @@ class Popup extends React.Component {
       newLabel: 'Activate!',
       alarmName: 'auto-url-pinger',
       inOutTime: '',
-      logs: []
+      logs: [],
+      showLogs: false
     };
     this.submitAddress = this.submitAddress.bind(this);
     this.toggleAlarm = this.toggleAlarm.bind(this);
+    this.toggleLogs = this.toggleLogs.bind(this);
   }
 
   componentDidMount(){
@@ -181,11 +183,13 @@ class Popup extends React.Component {
   showAlarm(){
     if(this.state.address.length > 0){
       return (
-        <div id='start-div'>
-          <span id='alarm-label' onClick={this.toggleAlarm}>
-            {this.state.newLabel}
-          </span>
-          {this.showLoader()}
+        <div id='start' className='yellow-background'>
+          <div id='start-div'>
+            <span id='alarm-label' onClick={this.toggleAlarm}>
+              {this.state.newLabel}
+            </span>
+            {this.showLoader()}
+          </div>
         </div>
       );
     }
@@ -232,6 +236,38 @@ class Popup extends React.Component {
     });
   }
 
+  toggleLogs(cond, e){
+    e.preventDefault();
+    if(cond === 'show'){
+      this.setState({showLogs: true});
+    } else {
+      this.setState({showLogs: false});
+    }
+  }
+
+  showLogs(){
+    if(this.state.showLogs){
+      return(
+        <ol>
+          {this.state.logs}
+        </ol>
+      );
+    }
+  }
+
+  showLogClose(){
+    if(this.state.showLogs){
+      return(
+        <div id='logs-close-button'>
+          <img src='../../../assets/icon/close.png'
+            onClick={e=>this.toggleLogs('close', e)}
+            height='17'
+            width='17'/>
+        </div>
+      );
+    }
+  }
+
   update(field){
     return e => { this.setState({[field]: e.currentTarget.value }); };
   }
@@ -250,6 +286,9 @@ class Popup extends React.Component {
   render(){
     return(
       <div id='container'>
+        <div id='header'>
+
+        </div>
         <div id='address-list'>
             <ol>
               {this.showAddressList()}
@@ -293,13 +332,15 @@ class Popup extends React.Component {
             </select>
           </div>
         </div>
-        <div id='start' className='yellow-background'>
-          {this.showAlarm()}
-        </div>
-        <div id='logs'>
-          <ol>
-            {this.state.logs}
-          </ol>
+        {this.showAlarm()}
+        <div id='logs-container'>
+          <div id='logs-toggle'>
+            <div onClick={e=>this.toggleLogs('show', e)}>Logs</div>
+          </div>
+          {this.showLogClose()}
+          <div id='logs'>
+            {this.showLogs()}
+          </div>
         </div>
       </div>
     );

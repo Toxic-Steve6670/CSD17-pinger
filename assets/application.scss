@@ -22,8 +22,12 @@ button:focus {
     outline: none;
 }
 
+#header {
+
+}
+
 #address-list, #data-input {
-  background: #c9a9f2;
+  background: #decbf7;
   width: 275px;
   padding: 10px 0;
   border-top: 1px solid #3A46b1;
@@ -93,11 +97,12 @@ button:focus {
 }
 
 #add-button:hover,
-#close-button:hover {
+#close-button:hover,
+#logs-close-button {
   cursor: pointer;
 }
 
-#alarm-label:hover {
+#alarm-label:hover, #logs-toggle > div:hover {
   cursor: pointer;
   color: #3A46b1;
   transition: color 0.3s;
@@ -151,8 +156,36 @@ button:focus {
   background: #b2ffb2;
 }
 
+#logs-container {
+  width: 275px;
+  position: relative;
+  margin-top: 10px;
+}
+
 #logs {
+  width: 275px;
+  max-height: 250px;
+  overflow: scroll;
+}
+
+#logs > ol {
   font-size: 10px;
+}
+
+#logs-toggle {
+  width: 275px;
+  display: flex;
+  justify-content: center;
+  padding: 5px 0;
+  border-top: 1px solid #3A46b1;
+  border-bottom: 1px solid #3A46b1;
+}
+
+#logs-close-button {
+  display: block;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 @keyframes spin {

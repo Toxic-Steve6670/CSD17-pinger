@@ -85,10 +85,12 @@
 	      newLabel: 'Activate!',
 	      alarmName: 'auto-url-pinger',
 	      inOutTime: '',
-	      logs: []
+	      logs: [],
+	      showLogs: false
 	    };
 	    _this.submitAddress = _this.submitAddress.bind(_this);
 	    _this.toggleAlarm = _this.toggleAlarm.bind(_this);
+	    _this.toggleLogs = _this.toggleLogs.bind(_this);
 	    return _this;
 	  }
 	
@@ -288,13 +290,17 @@
 	      if (this.state.address.length > 0) {
 	        return _react2.default.createElement(
 	          'div',
-	          { id: 'start-div' },
+	          { id: 'start', className: 'yellow-background' },
 	          _react2.default.createElement(
-	            'span',
-	            { id: 'alarm-label', onClick: this.toggleAlarm },
-	            this.state.newLabel
-	          ),
-	          this.showLoader()
+	            'div',
+	            { id: 'start-div' },
+	            _react2.default.createElement(
+	              'span',
+	              { id: 'alarm-label', onClick: this.toggleAlarm },
+	              this.state.newLabel
+	            ),
+	            this.showLoader()
+	          )
 	        );
 	      }
 	    }
@@ -354,34 +360,76 @@
 	      });
 	    }
 	  }, {
-	    key: 'update',
-	    value: function update(field) {
+	    key: 'toggleLogs',
+	    value: function toggleLogs(cond, e) {
+	      e.preventDefault();
+	      if (cond === 'show') {
+	        this.setState({ showLogs: true });
+	      } else {
+	        this.setState({ showLogs: false });
+	      }
+	    }
+	  }, {
+	    key: 'showLogs',
+	    value: function showLogs() {
+	      if (this.state.showLogs) {
+	        return _react2.default.createElement(
+	          'ol',
+	          null,
+	          this.state.logs
+	        );
+	      }
+	    }
+	  }, {
+	    key: 'showLogClose',
+	    value: function showLogClose() {
 	      var _this6 = this;
 	
+	      if (this.state.showLogs) {
+	        return _react2.default.createElement(
+	          'div',
+	          { id: 'logs-close-button' },
+	          _react2.default.createElement('img', { src: '../../../assets/icon/close.png',
+	            onClick: function onClick(e) {
+	              return _this6.toggleLogs('close', e);
+	            },
+	            height: '17',
+	            width: '17' })
+	        );
+	      }
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update(field) {
+	      var _this7 = this;
+	
 	      return function (e) {
-	        _this6.setState(_defineProperty({}, field, e.currentTarget.value));
+	        _this7.setState(_defineProperty({}, field, e.currentTarget.value));
 	      };
 	    }
 	  }, {
 	    key: 'updateTime',
 	    value: function updateTime(field) {
-	      var _this7 = this;
+	      var _this8 = this;
 	
 	      return function (e) {
-	        _this7.setState(_defineProperty({}, field, e.currentTarget.value), function () {
-	          var start = parseInt(_this7.state.startTime.split('am').join(''));
-	          var end = parseInt(_this7.state.endTime.split('pm').join(''));
-	          var time = _this7.timeChecker(start, end + 12);
-	          _this7.setState({ inOutTime: time });
+	        _this8.setState(_defineProperty({}, field, e.currentTarget.value), function () {
+	          var start = parseInt(_this8.state.startTime.split('am').join(''));
+	          var end = parseInt(_this8.state.endTime.split('pm').join(''));
+	          var time = _this8.timeChecker(start, end + 12);
+	          _this8.setState({ inOutTime: time });
 	        });
 	      };
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this9 = this;
+	
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'container' },
+	        _react2.default.createElement('div', { id: 'header' }),
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'address-list' },
@@ -533,18 +581,26 @@
 	            )
 	          )
 	        ),
+	        this.showAlarm(),
 	        _react2.default.createElement(
 	          'div',
-	          { id: 'start', className: 'yellow-background' },
-	          this.showAlarm()
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { id: 'logs' },
+	          { id: 'logs-container' },
 	          _react2.default.createElement(
-	            'ol',
-	            null,
-	            this.state.logs
+	            'div',
+	            { id: 'logs-toggle' },
+	            _react2.default.createElement(
+	              'div',
+	              { onClick: function onClick(e) {
+	                  return _this9.toggleLogs('show', e);
+	                } },
+	              'Logs'
+	            )
+	          ),
+	          this.showLogClose(),
+	          _react2.default.createElement(
+	            'div',
+	            { id: 'logs' },
+	            this.showLogs()
 	          )
 	        )
 	      );
