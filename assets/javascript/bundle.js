@@ -198,50 +198,6 @@
 	      }
 	    }
 	  }, {
-	    key: 'showAddressInput',
-	    value: function showAddressInput() {
-	      var http = 'http://',
-	          https = 'https://';
-	      return _react2.default.createElement(
-	        'form',
-	        { onSubmit: this.submitAddress, autoComplete: 'off', id: 'add-address' },
-	        _react2.default.createElement(
-	          'div',
-	          { id: 'transfer-protocol' },
-	          _react2.default.createElement(
-	            'select',
-	            null,
-	            'onChange=',
-	            this.update('transferProtocol'),
-	            '>',
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              http
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              null,
-	              https
-	            )
-	          )
-	        ),
-	        _react2.default.createElement('input', { type: 'text',
-	          placeholder: 'address',
-	          value: this.state.inputAddress,
-	          onChange: this.update('inputAddress'),
-	          id: 'address-input' }),
-	        _react2.default.createElement(
-	          'div',
-	          { id: 'add-button' },
-	          _react2.default.createElement('img', { src: '../../../assets/icon/plus.png',
-	            onClick: this.submitAddress,
-	            width: '15',
-	            height: '15' })
-	        )
-	      );
-	    }
-	  }, {
 	    key: 'showWarning',
 	    value: function showWarning() {
 	      if (this.state.warning) {
@@ -264,7 +220,7 @@
 	        if (hasAlarm) {
 	          _this4.setState({ newLabel: 'Activate!' });
 	          chrome.alarms.clear(_this4.state.alarmName);
-	          $('#start').removeClass('green-background red-background').addClass('yellow-background');
+	          $('#start').removeClass('green-background red-background').addClass('purple-background');
 	        } else {
 	          _this4.setState({ newLabel: 'Cancel' });
 	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 0.2, periodInMinutes: 0.2 });
@@ -290,7 +246,7 @@
 	      if (this.state.address.length > 0) {
 	        return _react2.default.createElement(
 	          'div',
-	          { id: 'start', className: 'yellow-background' },
+	          { id: 'start', className: 'purple-background' },
 	          _react2.default.createElement(
 	            'div',
 	            { id: 'start-div' },
@@ -310,7 +266,7 @@
 	      var startDiv = $('#start');
 	      if (this.state.newLabel === 'Cancel') {
 	        if (this.state.inOutTime === 'inTime') {
-	          startDiv.removeClass('yellow-background').addClass('green-background');
+	          startDiv.removeClass('purple-background').addClass('green-background');
 	          return _react2.default.createElement(
 	            'div',
 	            { id: 'start-div' },
@@ -322,7 +278,7 @@
 	            _react2.default.createElement('div', { className: 'loader' })
 	          );
 	        } else {
-	          startDiv.removeClass('yellow-background').addClass('red-background');
+	          startDiv.removeClass('purple-background').addClass('red-background');
 	          return _react2.default.createElement(
 	            'div',
 	            { id: 'start-div' },
@@ -430,6 +386,8 @@
 	    value: function render() {
 	      var _this9 = this;
 	
+	      var http = 'http://',
+	          https = 'https://';
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'container' },
@@ -446,7 +404,41 @@
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'data-input' },
-	          this.showAddressInput(),
+	          _react2.default.createElement(
+	            'form',
+	            { onSubmit: this.submitAddress, autoComplete: 'off', id: 'add-address' },
+	            _react2.default.createElement(
+	              'div',
+	              { id: 'transfer-protocol' },
+	              _react2.default.createElement(
+	                'select',
+	                { onChange: this.update('transferProtocol') },
+	                _react2.default.createElement(
+	                  'option',
+	                  null,
+	                  http
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  null,
+	                  https
+	                )
+	              )
+	            ),
+	            _react2.default.createElement('input', { type: 'text',
+	              placeholder: 'address',
+	              value: this.state.inputAddress,
+	              onChange: this.update('inputAddress'),
+	              id: 'address-input' }),
+	            _react2.default.createElement(
+	              'div',
+	              { id: 'add-button' },
+	              _react2.default.createElement('img', { src: '../../../assets/icon/plus.png',
+	                onClick: this.submitAddress,
+	                width: '12',
+	                height: '12' })
+	            )
+	          ),
 	          this.showWarning(),
 	          _react2.default.createElement(
 	            'div',

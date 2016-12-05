@@ -11,7 +11,7 @@ form, label, input, textarea, button {
   text-align: inherit;
   text-decoration: inherit;
   vertical-align: inherit;
-  color: #191919;
+  color: #323232;
   background: transparent;
   font-family: sans-serif;
 }
@@ -23,15 +23,24 @@ button:focus {
 }
 
 #header {
-
+  height: 40px;
+  width: 275px;
+  margin-bottom: 10px;
+  background-image: url('https://res.cloudinary.com/cloudlicious/image/upload/v1480899840/binarypurple_paig4k.png');
+  background-size: 275px 40px;
 }
 
 #address-list, #data-input {
-  background: #decbf7;
   width: 275px;
   padding: 10px 0;
-  border-top: 1px solid #3A46b1;
-  border-bottom: 1px solid #3A46b1;
+}
+
+#address-list {
+  background: #a976ea;
+}
+
+#data-input {
+  background: #be98ef;
 }
 
 #address-list,
@@ -85,7 +94,6 @@ button:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #ffffff;
 }
 
 #time-range {
@@ -111,8 +119,6 @@ button:focus {
 #start {
   width: 275px;
   padding: 10px 0;
-  border-top: 1px solid #3A46b1;
-  border-bottom: 1px solid #3A46b1;
 }
 
 #start-div {
@@ -144,8 +150,8 @@ button:focus {
   margin-left: 5px;
 }
 
-.yellow-background {
-  background: #ffffb2;
+.purple-background {
+  background: #d4baf5;
 }
 
 .red-background {
@@ -180,8 +186,7 @@ button:focus {
   display: flex;
   justify-content: center;
   padding: 5px 0;
-  border-top: 1px solid #3A46b1;
-  border-bottom: 1px solid #3A46b1;
+  background: #e9dcfa;
 }
 
 #logs-close-button {

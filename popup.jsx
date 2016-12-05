@@ -112,32 +112,6 @@ class Popup extends React.Component {
     }
   }
 
-  showAddressInput(){
-    let http = 'http://', https = 'https://';
-    return(
-      <form onSubmit={this.submitAddress} autoComplete='off' id='add-address'>
-        <div id="transfer-protocol">
-          <select>
-            onChange={this.update('transferProtocol')}>
-            <option>{http}</option>
-            <option>{https}</option>
-          </select>
-        </div>
-        <input type='text'
-               placeholder='address'
-               value={this.state.inputAddress}
-               onChange={this.update('inputAddress')}
-               id='address-input'/>
-        <div id='add-button'>
-          <img src='../../../assets/icon/plus.png'
-               onClick={this.submitAddress}
-               width='15'
-               height='15'/>
-        </div>
-      </form>
-    );
-  }
-
   showWarning(){
     if(this.state.warning){
       return(
@@ -155,7 +129,7 @@ class Popup extends React.Component {
         this.setState({newLabel: 'Activate!'});
         chrome.alarms.clear(this.state.alarmName);
         $('#start').removeClass('green-background red-background').
-        addClass('yellow-background');
+        addClass('purple-background');
       } else {
         this.setState({newLabel: 'Cancel'});
         chrome.alarms.create(
@@ -183,7 +157,7 @@ class Popup extends React.Component {
   showAlarm(){
     if(this.state.address.length > 0){
       return (
-        <div id='start' className='yellow-background'>
+        <div id='start' className='purple-background'>
           <div id='start-div'>
             <span id='alarm-label' onClick={this.toggleAlarm}>
               {this.state.newLabel}
@@ -199,7 +173,7 @@ class Popup extends React.Component {
     let startDiv = $('#start');
     if(this.state.newLabel === 'Cancel'){
       if(this.state.inOutTime === 'inTime'){
-        startDiv.removeClass('yellow-background').addClass('green-background');
+        startDiv.removeClass('purple-background').addClass('green-background');
         return(
           <div id='start-div'>
             <span id='pinging-text'>pinging...</span>
@@ -207,7 +181,7 @@ class Popup extends React.Component {
           </div>
         );
       } else {
-        startDiv.removeClass('yellow-background').addClass('red-background');
+        startDiv.removeClass('purple-background').addClass('red-background');
         return(
           <div id='start-div'>
             <span id='pinging-text'>waiting...</span>
@@ -286,6 +260,7 @@ class Popup extends React.Component {
   }
 
   render(){
+    let http = 'http://', https = 'https://';
     return(
       <div id='container'>
         <div id='header'>
@@ -297,7 +272,25 @@ class Popup extends React.Component {
             </ol>
         </div>
         <div id='data-input'>
-          {this.showAddressInput()}
+          <form onSubmit={this.submitAddress} autoComplete='off' id='add-address'>
+            <div id="transfer-protocol">
+              <select onChange={this.update('transferProtocol')}>
+                <option>{http}</option>
+                <option>{https}</option>
+              </select>
+            </div>
+            <input type='text'
+                   placeholder='address'
+                   value={this.state.inputAddress}
+                   onChange={this.update('inputAddress')}
+                   id='address-input'/>
+            <div id='add-button'>
+              <img src='../../../assets/icon/plus.png'
+                   onClick={this.submitAddress}
+                   width='12'
+                   height='12'/>
+            </div>
+          </form>
           {this.showWarning()}
           <div id='time-range'>
             <div id='time-child'>From</div>
