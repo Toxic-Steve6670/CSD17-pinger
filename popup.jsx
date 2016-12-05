@@ -136,11 +136,7 @@ class Popup extends React.Component {
           this.state.alarmName,
           {delayInMinutes: 0.2, periodInMinutes: 0.2}
         );
-        let start = parseInt(this.state.startTime.split('am').join(''));
-        let end = parseInt(this.state.endTime.split('pm').join(''));
-        chrome.storage.sync.set(
-          {'pinger-start-end-times': [start, end]}
-        );
+        this.setPingerTimes();
       }
     });
   }
@@ -152,6 +148,14 @@ class Popup extends React.Component {
     } else {
       return 'outTime';
     }
+  }
+
+  setPingerTimes(){
+    let start = parseInt(this.state.startTime.split('am').join(''));
+    let end = parseInt(this.state.endTime.split('pm').join(''));
+    chrome.storage.sync.set(
+      {'pinger-start-end-times': [start, end]}
+    );
   }
 
   showAlarm(){
@@ -255,7 +259,7 @@ class Popup extends React.Component {
         let start = parseInt(this.state.startTime.split('am').join(''));
         let end = parseInt(this.state.endTime.split('pm').join(''));
         let time = this.timeChecker(start, end + 12);
-        this.setState({inOutTime: time});
+        this.setState({inOutTime: time}, this.setPingerTimes());
       });
     };
   }

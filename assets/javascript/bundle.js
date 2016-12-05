@@ -224,9 +224,7 @@
 	        } else {
 	          _this4.setState({ newLabel: 'Cancel' });
 	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 0.2, periodInMinutes: 0.2 });
-	          var start = parseInt(_this4.state.startTime.split('am').join(''));
-	          var end = parseInt(_this4.state.endTime.split('pm').join(''));
-	          chrome.storage.sync.set({ 'pinger-start-end-times': [start, end] });
+	          _this4.setPingerTimes();
 	        }
 	      });
 	    }
@@ -239,6 +237,13 @@
 	      } else {
 	        return 'outTime';
 	      }
+	    }
+	  }, {
+	    key: 'setPingerTimes',
+	    value: function setPingerTimes() {
+	      var start = parseInt(this.state.startTime.split('am').join(''));
+	      var end = parseInt(this.state.endTime.split('pm').join(''));
+	      chrome.storage.sync.set({ 'pinger-start-end-times': [start, end] });
 	    }
 	  }, {
 	    key: 'showAlarm',
@@ -378,7 +383,7 @@
 	          var start = parseInt(_this8.state.startTime.split('am').join(''));
 	          var end = parseInt(_this8.state.endTime.split('pm').join(''));
 	          var time = _this8.timeChecker(start, end + 12);
-	          _this8.setState({ inOutTime: time });
+	          _this8.setState({ inOutTime: time }, _this8.setPingerTimes());
 	        });
 	      };
 	    }
