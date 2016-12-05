@@ -134,7 +134,7 @@ class Popup extends React.Component {
         this.setState({newLabel: 'Cancel'});
         chrome.alarms.create(
           this.state.alarmName,
-          {delayInMinutes: 0.2, periodInMinutes: 0.2}
+          {delayInMinutes: 1, periodInMinutes: 20}
         );
         this.setPingerTimes();
       }

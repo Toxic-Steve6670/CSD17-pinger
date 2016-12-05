@@ -223,7 +223,7 @@
 	          $('#start').removeClass('green-background red-background').addClass('purple-background');
 	        } else {
 	          _this4.setState({ newLabel: 'Cancel' });
-	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 0.2, periodInMinutes: 0.2 });
+	          chrome.alarms.create(_this4.state.alarmName, { delayInMinutes: 1, periodInMinutes: 20 });
 	          _this4.setPingerTimes();
 	        }
 	      });
