@@ -266,7 +266,7 @@
 	      var startDiv = $('#start');
 	      if (this.state.newLabel === 'Cancel') {
 	        if (this.state.inOutTime === 'inTime') {
-	          startDiv.removeClass('purple-background').addClass('green-background');
+	          startDiv.removeClass('purple-background red-background').addClass('green-background');
 	          return _react2.default.createElement(
 	            'div',
 	            { id: 'start-div' },
@@ -278,7 +278,7 @@
 	            _react2.default.createElement('div', { className: 'loader' })
 	          );
 	        } else {
-	          startDiv.removeClass('purple-background').addClass('red-background');
+	          startDiv.removeClass('purple-background green-background').addClass('red-background');
 	          return _react2.default.createElement(
 	            'div',
 	            { id: 'start-div' },
