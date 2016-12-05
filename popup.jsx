@@ -15,7 +15,7 @@ class Popup extends React.Component {
       newLabel: 'Activate!',
       alarmName: 'auto-url-pinger',
       inOutTime: '',
-      logs: [],
+      logs: 'No logs yet!',
       showLogs: false
     };
     this.submitAddress = this.submitAddress.bind(this);
@@ -102,8 +102,8 @@ class Popup extends React.Component {
               <div id='close-button'>
                 <img src='../../../assets/icon/close.png'
                   onClick={(e)=>this.removeAddress(add, e)}
-                  height='17'
-                  width='17'/>
+                  height='10'
+                  width='10'/>
               </div>
             </div>
           );
@@ -198,7 +198,7 @@ class Popup extends React.Component {
       if(logs){
         let l = logs.map((log, i)=>{
           return(
-            <div key={`log-${i}`}>
+            <div key={`log-${i}`} id='single-log-div'>
               <li type='1'>
                 {log}
               </li>
@@ -212,6 +212,7 @@ class Popup extends React.Component {
 
   toggleLogs(cond, e){
     e.preventDefault();
+    this.getLogs();
     if(cond === 'show'){
       this.setState({showLogs: true});
     } else {
@@ -263,13 +264,13 @@ class Popup extends React.Component {
     let http = 'http://', https = 'https://';
     return(
       <div id='container'>
-        <div id='header'>
-
-        </div>
-        <div id='address-list'>
+        <div id='header'></div>
+        <div id='address-list-container'>
+          <div id='address-list'>
             <ol>
               {this.showAddressList()}
             </ol>
+          </div>
         </div>
         <div id='data-input'>
           <form onSubmit={this.submitAddress} autoComplete='off' id='add-address'>

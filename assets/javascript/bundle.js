@@ -85,7 +85,7 @@
 	      newLabel: 'Activate!',
 	      alarmName: 'auto-url-pinger',
 	      inOutTime: '',
-	      logs: [],
+	      logs: 'No logs yet!',
 	      showLogs: false
 	    };
 	    _this.submitAddress = _this.submitAddress.bind(_this);
@@ -190,8 +190,8 @@
 	                onClick: function onClick(e) {
 	                  return _this3.removeAddress(add, e);
 	                },
-	                height: '17',
-	                width: '17' })
+	                height: '10',
+	                width: '10' })
 	            )
 	          );
 	        });
@@ -303,7 +303,7 @@
 	          var l = logs.map(function (log, i) {
 	            return _react2.default.createElement(
 	              'div',
-	              { key: 'log-' + i },
+	              { key: 'log-' + i, id: 'single-log-div' },
 	              _react2.default.createElement(
 	                'li',
 	                { type: '1' },
@@ -319,6 +319,7 @@
 	    key: 'toggleLogs',
 	    value: function toggleLogs(cond, e) {
 	      e.preventDefault();
+	      this.getLogs();
 	      if (cond === 'show') {
 	        this.setState({ showLogs: true });
 	      } else {
@@ -394,11 +395,15 @@
 	        _react2.default.createElement('div', { id: 'header' }),
 	        _react2.default.createElement(
 	          'div',
-	          { id: 'address-list' },
+	          { id: 'address-list-container' },
 	          _react2.default.createElement(
-	            'ol',
-	            null,
-	            this.showAddressList()
+	            'div',
+	            { id: 'address-list' },
+	            _react2.default.createElement(
+	              'ol',
+	              null,
+	              this.showAddressList()
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(

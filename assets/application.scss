@@ -6,20 +6,24 @@ form, label, input, textarea, button {
   padding: 0;
 
   font: inherit;
-  font-family: sans-serif;
+  font-family: 'Press Start 2P', sans-serif;
   box-sizing: inherit;
   text-align: inherit;
   text-decoration: inherit;
   vertical-align: inherit;
   color: #323232;
   background: transparent;
-  font-family: sans-serif;
 }
 
 input:focus,
 select:focus,
 button:focus {
     outline: none;
+}
+
+select {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 8px;
 }
 
 #header {
@@ -30,20 +34,26 @@ button:focus {
   background-size: 275px 40px;
 }
 
-#address-list, #data-input {
-  width: 275px;
-  padding: 10px 0;
-}
-
-#address-list {
+#address-list-container {
+  padding-left: 10px;
   background: #a976ea;
 }
 
-#data-input {
-  background: #be98ef;
+#address-list {
+  font-size: 8.5px;
+  width: 265px;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
 }
 
-#address-list,
+#data-input {
+  width: 275px;
+  padding: 10px 0;
+  background: #be98ef;
+  font-size: 14px;
+}
+
 #add-address,
 #warning,
 #time-range,
@@ -62,6 +72,12 @@ button:focus {
   width: 275px;
   display: flex;
   justify-content: center;
+  margin-bottom: 5px;
+  color: #3a46b1;
+}
+
+#single-list:last-child {
+  margin-bottom: 0;
 }
 
 #inner-list {
@@ -72,18 +88,26 @@ button:focus {
 #address-input {
   background: #ffffff;
   width: 150px;
-  border: 1px solid #3A46b1;
+  border: 1px solid #3a46b1;
   border-radius: 3px;
   margin: 0 5px;
-  font-size: 14px;
+  font-size: 10px;
   padding-left: 3px;
-  color: #3A46b1;
+  color: #3a46b1;
+}
+
+#address-input > form {
+  font-family: 'Press Start 2P', sans-serif;
 }
 
 #transfer-protocol {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#transfer-protocol > select {
+  width: 85px;
 }
 
 #add-button {
@@ -110,9 +134,13 @@ button:focus {
   cursor: pointer;
 }
 
+#close-button {
+  padding-left: 5px;
+}
+
 #alarm-label:hover, #logs-toggle > div:hover {
   cursor: pointer;
-  color: #3A46b1;
+  color: #3a46b1;
   transition: color 0.3s;
 }
 
@@ -124,6 +152,7 @@ button:focus {
 #start-div {
   display: flex;
   justify-content: center;
+  font-size: 14px;
 }
 
 #alarm-label {
@@ -168,25 +197,30 @@ button:focus {
   margin-top: 10px;
 }
 
-#logs {
-  width: 268px;
-  max-height: 250px;
-  overflow: scroll;
-  border: 1px solid #3A46b1;
-  margin: 1px;
-  padding: 0 2px;
-}
-
-#logs > ol {
-  font-size: 10px;
-}
-
 #logs-toggle {
   width: 275px;
   display: flex;
   justify-content: center;
   padding: 5px 0;
   background: #e9dcfa;
+  font-size: 14px;
+}
+
+#logs {
+  width: 268px;
+  max-height: 250px;
+  overflow: scroll;
+  margin: 1px;
+  padding: 0 2px;
+  font-size: 7px;
+}
+
+#single-log-div {
+  margin-bottom: 10px;
+}
+
+#single-log-div:first-child {
+  margin-top: 10px;
 }
 
 #logs-close-button {

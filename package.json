@@ -1,5 +1,5 @@
 {
-  "name": "auto_url_pinger",
+  "name": "Pinger",
   "version": "1.0.0",
   "main": "background.js",
   "scripts": {
