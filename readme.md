@@ -1,5 +1,7 @@
-<h1>Auto URL Pinger</h1>
+<h1>Pinger</h1>
 <p>Prevents your free dyno from falling asleep.</p>
+<p>Check it out on the <a href='https://chrome.google.com/webstore/detail/pinger/egbpibkpckbdhmacfijknpecliodfcgh'>
+Chrome Store</a></p>
 <h1>Features</h1>
 <p>Pinger will ping any websites on demand. Some site hosting services, such as Heroku, have a timer (e.g. 30 minutes) for their free acounts, such that after a certain amount of inactivity they will go to sleep and can take up to 10 or 20 seconds to wake up. Pinger will ping your websites every 20 minutes to make sure they will never go to sleep which ensures instantaneous page load.</p>
 <p>Pinger allows you to ping multiple sites at once. Pinger also allows you to select the time range of the day that you want to be pinging your sites. Logs are provided in the extension to keep track of successful pings and any error reports. Pinger stores your sites in Chrome's synchronous storage so you will always have access to your stored sites.</p>
