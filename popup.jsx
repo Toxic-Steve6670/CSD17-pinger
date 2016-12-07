@@ -197,7 +197,7 @@ class Popup extends React.Component {
   }
 
   getLogs(){
-    chrome.storage.sync.get('pinger-log', data=>{
+    chrome.storage.local.get('pinger-log', data=>{
       let logs = data['pinger-log'];
       if(logs){
         let l = logs.map((log, i)=>{

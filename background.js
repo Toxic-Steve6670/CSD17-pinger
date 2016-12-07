@@ -6,19 +6,19 @@ function pinger(addresses, log){
       url: add,
       success: function(){
         let newLogs = log;
-        if(newLogs.length > 145){
+        if(newLogs.length > 288){
           newLogs.pop();
         }
         newLogs.unshift(`${getCurrentTime()} ping to ${add} : success!`);
-        chrome.storage.sync.set({'pinger-log': newLogs});
+        chrome.storage.local.set({'pinger-log': newLogs});
       },
       error: function(err){
         let newLogs = log;
-        if(newLogs.length > 145){
+        if(newLogs.length > 288){
           newLogs.pop();
         }
         newLogs.unshift(`${getCurrentTime()} ping to ${add} : failed. Errors(${err})`);
-        chrome.storage.sync.set({'pinger-log': newLogs});
+        chrome.storage.local.set({'pinger-log': newLogs});
       }
     });
   });
@@ -40,7 +40,7 @@ function getAddresses(logs){
 }
 
 function getLogs(){
-  chrome.storage.sync.get('pinger-log', data=>{
+  chrome.storage.local.get('pinger-log', data=>{
     let logs = [];
     if(data['pinger-log']){
       logs = data['pinger-log'];

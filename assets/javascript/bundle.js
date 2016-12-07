@@ -302,7 +302,7 @@
 	    value: function getLogs() {
 	      var _this5 = this;
 	
-	      chrome.storage.sync.get('pinger-log', function (data) {
+	      chrome.storage.local.get('pinger-log', function (data) {
 	        var logs = data['pinger-log'];
 	        if (logs) {
 	          var l = logs.map(function (log, i) {
