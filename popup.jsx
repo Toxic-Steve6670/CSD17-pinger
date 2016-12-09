@@ -255,12 +255,13 @@ class Popup extends React.Component {
 
   updateTime(field){
     return e => {
-      this.setState({[field]: e.currentTarget.value }, ()=>{
-        let start = parseInt(this.state.startTime.split('am').join(''));
-        let end = parseInt(this.state.endTime.split('pm').join(''));
-        let time = this.timeChecker(start, end + 12);
-        this.setState({inOutTime: time}, this.setPingerTimes());
-      });
+      let start = parseInt(this.state.startTime.split('am').join(''));
+      let end = parseInt(this.state.endTime.split('pm').join(''));
+      let time = this.timeChecker(start, end + 12);
+      this.setState({
+        [field]: e.currentTarget.value,
+        inOutTime: time
+      }, this.setPingerTimes());
     };
   }
 
